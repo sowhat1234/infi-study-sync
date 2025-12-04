@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setup - Infi 1 Study Sync</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .setup-container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            max-width: 600px;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .step {
+            margin-bottom: 30px;
+        }
+        
+        .step h2 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+        
+        .step p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+        
+        .code-block {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            margin-top: 20px;
+        }
+        
+        a {
+            color: #667eea;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+    <div class="setup-container">
+        <h1>🔧 Setup Instructions</h1>
+        
+        <div class="step">
+            <h2>Step 1: Create Google Cloud Project</h2>
+            <p>1. Go to <a href="https://console.cloud.google.com/" target="_blank">Google Cloud Console</a></p>
+            <p>2. Create a new project or select an existing one</p>
+            <p>3. Enable the Google Calendar API</p>
+        </div>
+        
+        <div class="step">
+            <h2>Step 2: Create OAuth Credentials</h2>
+            <p>1. Go to "APIs & Services" > "Credentials"</p>
+            <p>2. Click "Create Credentials" > "OAuth client ID"</p>
+            <p>3. Choose "Web application"</p>
+            <p>4. Add authorized redirect URI:</p>
+            <div class="code-block">http://localhost:5000/oauth2callback</div>
+            <p>5. Download the JSON file</p>
+        </div>
+        
+        <div class="step">
+            <h2>Step 3: Add Credentials File</h2>
+            <p>Rename the downloaded JSON file to <code>client_secret.json</code> and place it in the project root directory.</p>
+        </div>
+        
+        <div class="step">
+            <h2>Step 4: Install Dependencies</h2>
+            <div class="code-block">pip install -r requirements.txt</div>
+        </div>
+        
+        <div class="step">
+            <h2>Step 5: Run the App</h2>
+            <div class="code-block">python app.py</div>
+            <p>Then visit <a href="http://localhost:5000">http://localhost:5000</a></p>
+        </div>
+        
+        <a href="{{ url_for('index') }}" class="btn">Back to Home</a>
+    </div>
+</body>
+</html>
+

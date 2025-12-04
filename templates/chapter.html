@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ chapter.title }} - Infi 1 Study Sync</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+        }
+        
+        .back-link {
+            color: #667eea;
+            text-decoration: none;
+            margin-bottom: 15px;
+            display: inline-block;
+            font-weight: 600;
+        }
+        
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .chapter-description {
+            color: #666;
+            font-size: 16px;
+        }
+        
+        .theorem-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .theorem-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .theorem-description {
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .confidence-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #f0f0f0;
+        }
+        
+        .confidence-label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .confidence-slider {
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: #e0e0e0;
+            outline: none;
+            -webkit-appearance: none;
+        }
+        
+        .confidence-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+        }
+        
+        .confidence-slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .confidence-value {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+            margin-top: 10px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .schedule-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #f0f0f0;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: 600;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            display: none;
+        }
+        
+        .alert.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .alert.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .current-confidence {
+            font-size: 14px;
+            color: #888;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="{{ url_for('index') }}" class="back-link">← Back to Chapters</a>
+            <h1>Chapter {{ chapter.num }}: {{ chapter.title }}</h1>
+            <p class="chapter-description">{{ chapter.description }}</p>
+        </div>
+        
+        {% for theorem in theorems %}
+        <div class="theorem-card">
+            <div class="theorem-title">{{ theorem.title }}</div>
+            <div class="theorem-description">{{ theorem.description }}</div>
+            
+            <div class="confidence-section">
+                <div class="confidence-label">Rate Your Understanding (0-10)</div>
+                <input type="range" 
+                       class="confidence-slider" 
+                       min="0" 
+                       max="10" 
+                       value="{{ theorem.confidence }}"
+                       data-theorem-id="{{ theorem.id }}"
+                       oninput="updateConfidenceValue(this)">
+                <div class="confidence-value" id="confidence-{{ theorem.id }}">{{ theorem.confidence }}</div>
+                {% if theorem.confidence > 0 %}
+                <div class="current-confidence">Current confidence: {{ theorem.confidence }}/10</div>
+                {% endif %}
+                {% if theorem.last_reviewed %}
+                <div class="current-confidence">Last reviewed: {{ theorem.last_reviewed }}</div>
+                {% endif %}
+                <button class="btn" onclick="saveConfidence({{ theorem.id }})">Save Confidence</button>
+                <div class="alert" id="alert-{{ theorem.id }}"></div>
+            </div>
+            
+            <div class="schedule-section">
+                <div class="confidence-label">Schedule Study Session</div>
+                <div class="form-group">
+                    <label>Date:</label>
+                    <input type="date" id="date-{{ theorem.id }}">
+                </div>
+                <div class="form-group">
+                    <label>Time:</label>
+                    <input type="time" id="time-{{ theorem.id }}" value="18:00">
+                </div>
+                <button class="btn" onclick="scheduleStudy({{ theorem.id }})">Schedule in Calendar</button>
+                <div class="alert" id="schedule-alert-{{ theorem.id }}"></div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <script>
+        function updateConfidenceValue(slider) {
+            const theoremId = slider.getAttribute('data-theorem-id');
+            const valueDisplay = document.getElementById('confidence-' + theoremId);
+            valueDisplay.textContent = slider.value;
+        }
+        
+        function saveConfidence(theoremId) {
+            const slider = document.querySelector(`[data-theorem-id="${theoremId}"]`);
+            const confidence = parseInt(slider.value);
+            const alertDiv = document.getElementById('alert-' + theoremId);
+            
+            fetch('/rate_confidence', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    theorem_id: theoremId,
+                    confidence: confidence
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alertDiv.className = 'alert success';
+                    if (data.review_scheduled) {
+                        alertDiv.textContent = `Confidence saved! A review session has been automatically scheduled for 3 days from now.`;
+                    } else {
+                        alertDiv.textContent = 'Confidence saved successfully!';
+                    }
+                    alertDiv.style.display = 'block';
+                    setTimeout(() => {
+                        alertDiv.style.display = 'none';
+                    }, 5000);
+                } else {
+                    throw new Error(data.error || 'Failed to save');
+                }
+            })
+            .catch(error => {
+                alertDiv.className = 'alert error';
+                alertDiv.textContent = 'Error: ' + error.message;
+                alertDiv.style.display = 'block';
+            });
+        }
+        
+        function scheduleStudy(theoremId) {
+            const dateInput = document.getElementById('date-' + theoremId);
+            const timeInput = document.getElementById('time-' + theoremId);
+            const alertDiv = document.getElementById('schedule-alert-' + theoremId);
+            
+            if (!dateInput.value) {
+                alertDiv.className = 'alert error';
+                alertDiv.textContent = 'Please select a date';
+                alertDiv.style.display = 'block';
+                return;
+            }
+            
+            fetch('/schedule_study', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    theorem_id: theoremId,
+                    study_date: dateInput.value,
+                    study_time: timeInput.value
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alertDiv.className = 'alert success';
+                    alertDiv.textContent = 'Study session scheduled successfully in Google Calendar!';
+                    alertDiv.style.display = 'block';
+                    setTimeout(() => {
+                        alertDiv.style.display = 'none';
+                    }, 5000);
+                } else {
+                    throw new Error(data.error || 'Failed to schedule');
+                }
+            })
+            .catch(error => {
+                alertDiv.className = 'alert error';
+                alertDiv.textContent = 'Error: ' + error.message;
+                alertDiv.style.display = 'block';
+            });
+        }
+        
+        // Set minimum date to today
+        document.addEventListener('DOMContentLoaded', function() {
+            const today = new Date().toISOString().split('T')[0];
+            document.querySelectorAll('input[type="date"]').forEach(input => {
+                input.setAttribute('min', today);
+            });
+        });
+    </script>
+</body>
+</html>
+

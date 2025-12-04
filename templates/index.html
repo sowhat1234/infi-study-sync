@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Journal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .subtitle {
+            color: #666;
+            font-size: 16px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+        }
+        
+        .search-filters {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .filter-row {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: end;
+        }
+        
+        .form-group {
+            flex: 1;
+            min-width: 150px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .entries-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .entry-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+        
+        .entry-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        
+        .entry-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .entry-date {
+            font-size: 24px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .entry-stats {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .entry-notes {
+            color: #666;
+            font-size: 14px;
+            margin-top: 10px;
+            font-style: italic;
+        }
+        
+        .empty-state {
+            background: white;
+            padding: 60px;
+            border-radius: 15px;
+            text-align: center;
+            color: #666;
+        }
+        
+        .empty-state h2 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .nav-links a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .nav-links a:hover {
+            text-decoration: underline;
+        }
+        
+        .stats-summary {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .streak-display {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+        }
+        
+        .streak-display .stat-value {
+            color: white;
+            font-size: 48px;
+        }
+        
+        .streak-display .stat-label {
+            color: rgba(255,255,255,0.9);
+        }
+        
+        .badges-preview {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .badges-preview h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .badges-list {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .badge-mini {
+            text-align: center;
+            padding: 15px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            border: 2px solid #667eea;
+            min-width: 100px;
+        }
+        
+        .badge-mini-icon {
+            font-size: 32px;
+            margin-bottom: 5px;
+        }
+        
+        .badge-mini-name {
+            font-size: 12px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .progress-section {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .progress-section h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .progress-item {
+            margin-bottom: 15px;
+        }
+        
+        .progress-item-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 25px;
+            background: #e0e0e0;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 11px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div>
+                <h1>📚 Study Journal</h1>
+                <p class="subtitle">Track your exercises and learning progress</p>
+            </div>
+            <div>
+                <a href="{{ url_for('entry_detail', date_str=today_date) }}" class="btn">New Entry Today</a>
+            </div>
+        </header>
+        
+        {% if stats %}
+        <div class="stats-summary">
+            <div class="stat-item">
+                <div class="stat-value">{{ stats.total_exercises }}</div>
+                <div class="stat-label">Total Exercises</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">{{ stats.total_days }}</div>
+                <div class="stat-label">Days Logged</div>
+            </div>
+            <div class="streak-display">
+                <div class="stat-value">🔥 {{ stats.current_streak }}</div>
+                <div class="stat-label">Day Streak</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">{{ stats.badges_count }}</div>
+                <div class="stat-label">Badges Unlocked</div>
+            </div>
+        </div>
+        
+        {% if stats.recent_badges %}
+        <div class="badges-preview">
+            <h3>✨ Recent Badges</h3>
+            <div class="badges-list">
+                {% for badge in stats.recent_badges[:5] %}
+                <div class="badge-mini">
+                    <div class="badge-mini-icon">{{ badge.icon }}</div>
+                    <div class="badge-mini-name">{{ badge.name }}</div>
+                </div>
+                {% endfor %}
+            </div>
+            <div style="margin-top: 15px;">
+                <a href="{{ url_for('stats') }}" class="btn btn-secondary" style="font-size: 12px; padding: 8px 16px;">View All Stats →</a>
+            </div>
+        </div>
+        {% endif %}
+        
+        <div class="progress-section">
+            <h3>Progress to Next Milestones</h3>
+            {% set milestones = [5, 10, 50, 100] %}
+            {% set next_exercise_badge = None %}
+            {% for milestone in milestones %}
+                {% if milestone > stats.total_exercises and not next_exercise_badge %}
+                    {% set next_exercise_badge = milestone %}
+                {% endif %}
+            {% endfor %}
+            {% if next_exercise_badge %}
+            <div class="progress-item">
+                <div class="progress-item-label">
+                    <span>Next Exercise Badge ({{ next_exercise_badge }} exercises)</span>
+                    <span>{{ stats.total_exercises }} / {{ next_exercise_badge }}</span>
+                </div>
+                <div class="progress-bar">
+                    {% set progress_pct = (stats.total_exercises / next_exercise_badge * 100) | round(0) | int %}
+                    {% if progress_pct > 100 %}{% set progress_pct = 100 %}{% endif %}
+                    <div class="progress-fill" style="width: {{ progress_pct }}%">
+                        {{ progress_pct }}%
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            
+            {% set streak_milestones = [7, 30] %}
+            {% set next_streak_badge = None %}
+            {% for milestone in streak_milestones %}
+                {% if milestone > stats.current_streak and not next_streak_badge %}
+                    {% set next_streak_badge = milestone %}
+                {% endif %}
+            {% endfor %}
+            {% if next_streak_badge %}
+            <div class="progress-item">
+                <div class="progress-item-label">
+                    <span>Next Streak Badge ({{ next_streak_badge }} days)</span>
+                    <span>{{ stats.current_streak }} / {{ next_streak_badge }}</span>
+                </div>
+                <div class="progress-bar">
+                    {% set streak_progress = (stats.current_streak / next_streak_badge * 100) | round(0) | int %}
+                    {% if streak_progress > 100 %}{% set streak_progress = 100 %}{% endif %}
+                    <div class="progress-fill" style="width: {{ streak_progress }}%">
+                        {{ streak_progress }}%
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        {% endif %}
+        
+        <div class="search-filters">
+            <form method="GET" action="{{ url_for('search') }}" id="searchForm">
+                <div class="filter-row">
+                    <div class="form-group">
+                        <label>Search Exercise #</label>
+                        <input type="number" name="q" placeholder="e.g., 76" value="{{ search_query or '' }}">
+                    </div>
+                    <div class="form-group">
+                        <label>Subject</label>
+                        <select name="subject">
+                            <option value="">All Subjects</option>
+                            {% for subject in subjects %}
+                            <option value="{{ subject.id }}" {% if selected_subject == subject.id %}selected{% endif %}>
+                                {{ subject.name }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>From Date</label>
+                        <input type="date" name="date_from" value="{{ date_from or '' }}">
+                    </div>
+                    <div class="form-group">
+                        <label>To Date</label>
+                        <input type="date" name="date_to" value="{{ date_to or '' }}">
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn">Search</button>
+                        <a href="{{ url_for('index') }}" class="btn btn-secondary" style="margin-top: 5px; display: block; text-align: center;">Clear</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+        
+        <div class="nav-links">
+            <a href="{{ url_for('subjects_list') }}">View All Subjects</a>
+            <a href="{{ url_for('stats') }}">📊 Statistics Dashboard</a>
+        </div>
+        
+        <div class="entries-list">
+            {% if entries %}
+                {% for entry in entries %}
+                <div class="entry-card" onclick="window.location.href='{{ url_for('entry_detail', date_str=entry.date) }}'">
+                    <div class="entry-header">
+                        <div class="entry-date">{{ entry.date }}</div>
+                        <div class="entry-stats">{{ entry.exercise_count }} exercise{{ 's' if entry.exercise_count != 1 else '' }}</div>
+                    </div>
+                    {% if entry.notes %}
+                    <div class="entry-notes">{{ entry.notes }}</div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">
+                    <h2>No entries yet</h2>
+                    <p>Start tracking your exercises by creating your first entry!</p>
+                    <a href="{{ url_for('entry_detail', date_str=today_date) }}" class="btn" style="margin-top: 20px;">Create Entry for Today</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

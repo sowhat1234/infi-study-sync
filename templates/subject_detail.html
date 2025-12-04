@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ subject_name }} - Subjects</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+        }
+        
+        .back-link {
+            color: #667eea;
+            text-decoration: none;
+            margin-bottom: 15px;
+            display: inline-block;
+            font-weight: 600;
+        }
+        
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .exercise-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .exercise-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .exercise-number {
+            font-size: 24px;
+            font-weight: 600;
+            color: #667eea;
+        }
+        
+        .exercise-date {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .exercise-field {
+            margin-bottom: 20px;
+        }
+        
+        .exercise-field label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .exercise-field .field-content {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+        
+        .exercise-field .field-content.empty {
+            color: #999;
+            font-style: italic;
+        }
+        
+        .empty-state {
+            background: white;
+            padding: 60px;
+            border-radius: 15px;
+            text-align: center;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="{{ url_for('subjects_list') }}" class="back-link">← Back to Subjects</a>
+            <h1>{{ subject_name }}</h1>
+            <p style="color: #666;">All exercises tagged with this subject</p>
+        </div>
+        
+        {% if exercises %}
+            {% for exercise in exercises %}
+            <div class="exercise-card">
+                <div class="exercise-header">
+                    <div class="exercise-number">Exercise {{ exercise.exercise_number }}</div>
+                    <div class="exercise-date">{{ exercise.entry_date }}</div>
+                </div>
+                
+                <div class="exercise-field">
+                    <label>Methods Used</label>
+                    <div class="field-content {% if not exercise.methods_used %}empty{% endif %}">
+                        {{ exercise.methods_used or '(none)' }}
+                    </div>
+                </div>
+                
+                <div class="exercise-field">
+                    <label>Tips</label>
+                    <div class="field-content {% if not exercise.tips %}empty{% endif %}">
+                        {{ exercise.tips or '(none)' }}
+                    </div>
+                </div>
+                
+                <div class="exercise-field">
+                    <label>Problems Encountered</label>
+                    <div class="field-content {% if not exercise.problems_encountered %}empty{% endif %}">
+                        {{ exercise.problems_encountered or '(none)' }}
+                    </div>
+                </div>
+                
+                <div class="exercise-field">
+                    <label>Insights</label>
+                    <div class="field-content {% if not exercise.insights %}empty{% endif %}">
+                        {{ exercise.insights or '(none)' }}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+        <div class="empty-state">
+            <h2>No exercises found</h2>
+            <p>No exercises have been tagged with this subject yet.</p>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
+
