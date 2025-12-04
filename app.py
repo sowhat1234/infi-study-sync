@@ -34,6 +34,7 @@ def init_db():
                   insights TEXT,
                   difficulty_rating INTEGER,
                   time_spent_minutes INTEGER,
+                  is_completed BOOLEAN DEFAULT 0,
                   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                   FOREIGN KEY (daily_entry_id) REFERENCES daily_entries(id))''')
     
@@ -44,6 +45,10 @@ def init_db():
         pass
     try:
         c.execute("ALTER TABLE exercise_logs ADD COLUMN time_spent_minutes INTEGER")
+    except:
+        pass
+    try:
+        c.execute("ALTER TABLE exercise_logs ADD COLUMN is_completed BOOLEAN DEFAULT 0")
     except:
         pass
     
@@ -125,9 +130,6 @@ def init_db():
     
     conn.commit()
     conn.close()
-    
-    # Initialize badges
-    init_badges()
 
 def detect_subjects(text):
     """Detect subject keywords in text and return suggested subject names"""
@@ -180,6 +182,53 @@ def get_or_create_subject(subject_name):
     conn.close()
     return subject_id
 
+def cleanup_duplicate_badges():
+    """Remove duplicate badges, keeping only Hebrew ones"""
+    conn = sqlite3.connect(get_db_path())
+    c = conn.cursor()
+    
+    # Find badges with same milestone_type and milestone_value
+    c.execute('''SELECT milestone_type, milestone_value, GROUP_CONCAT(id) as ids
+                 FROM badges
+                 GROUP BY milestone_type, milestone_value
+                 HAVING COUNT(*) > 1''')
+    
+    duplicates = c.fetchall()
+    
+    for milestone_type, milestone_value, ids_str in duplicates:
+        badge_ids = [int(id) for id in ids_str.split(',')]
+        
+        # Get all badges with this milestone
+        c.execute('''SELECT id, name FROM badges 
+                     WHERE milestone_type = ? AND milestone_value = ?''', 
+                  (milestone_type, milestone_value))
+        badges = c.fetchall()
+        
+        # Find Hebrew badge (contains Hebrew characters)
+        hebrew_badge_id = None
+        for badge_id, name in badges:
+            # Check if name contains Hebrew characters
+            if any('\u0590' <= char <= '\u05FF' for char in name):
+                hebrew_badge_id = badge_id
+                break
+        
+        # If no Hebrew badge found, keep the first one
+        if not hebrew_badge_id:
+            hebrew_badge_id = badges[0][0]
+        
+        # Delete other badges and update user_badges references
+        for badge_id, name in badges:
+            if badge_id != hebrew_badge_id:
+                # Update user_badges to point to Hebrew badge
+                c.execute('''UPDATE OR IGNORE user_badges 
+                           SET badge_id = ? 
+                           WHERE badge_id = ?''', (hebrew_badge_id, badge_id))
+                # Delete duplicate badge
+                c.execute('DELETE FROM badges WHERE id = ?', (badge_id,))
+    
+    conn.commit()
+    conn.close()
+
 def init_badges():
     """Initialize badge definitions"""
     conn = sqlite3.connect(get_db_path())
@@ -204,6 +253,9 @@ def init_badges():
     
     conn.commit()
     conn.close()
+    
+    # Clean up any duplicate badges
+    cleanup_duplicate_badges()
 
 def calculate_streak():
     """Calculate current streak and longest streak"""
@@ -455,7 +507,7 @@ def entry_detail(date_str):
     
     # Get all exercises for this entry
     c.execute('''SELECT el.id, el.exercise_number, el.methods_used, el.tips,
-                 el.problems_encountered, el.insights, el.difficulty_rating, el.time_spent_minutes
+                 el.problems_encountered, el.insights, el.difficulty_rating, el.time_spent_minutes, el.is_completed
                  FROM exercise_logs el
                  WHERE el.daily_entry_id = ?
                  ORDER BY el.exercise_number''', (entry_id,))
@@ -479,6 +531,7 @@ def entry_detail(date_str):
             'insights': row[5],
             'difficulty_rating': row[6],
             'time_spent_minutes': row[7],
+            'is_completed': bool(row[8]) if len(row) > 8 else False,
             'subjects': exercise_subjects
         })
     
@@ -624,6 +677,29 @@ def delete_exercise(exercise_id):
     
     return jsonify({'success': True})
 
+@app.route('/exercise/<int:exercise_id>/toggle-complete', methods=['POST'])
+def toggle_exercise_complete(exercise_id):
+    """Toggle exercise completion status"""
+    conn = sqlite3.connect(get_db_path())
+    c = conn.cursor()
+    
+    # Get current completion status
+    c.execute('SELECT is_completed FROM exercise_logs WHERE id = ?', (exercise_id,))
+    result = c.fetchone()
+    
+    if not result:
+        conn.close()
+        return jsonify({'error': 'Exercise not found'}), 404
+    
+    # Toggle completion status
+    new_status = not bool(result[0])
+    c.execute('UPDATE exercise_logs SET is_completed = ? WHERE id = ?', (new_status, exercise_id))
+    
+    conn.commit()
+    conn.close()
+    
+    return jsonify({'success': True, 'is_completed': new_status})
+
 @app.route('/entry/<date_str>/notes', methods=['PUT'])
 def update_entry_notes(date_str):
     """Update daily entry notes"""
@@ -691,7 +767,7 @@ def subject_detail(subject_id):
     
     # Get all exercises with this subject
     c.execute('''SELECT el.id, el.exercise_number, el.methods_used, el.tips,
-                 el.problems_encountered, el.insights, de.entry_date, el.difficulty_rating, el.time_spent_minutes
+                 el.problems_encountered, el.insights, de.entry_date, el.difficulty_rating, el.time_spent_minutes, el.is_completed
                  FROM exercise_logs el
                  JOIN exercise_subjects es ON el.id = es.exercise_log_id
                  JOIN daily_entries de ON el.daily_entry_id = de.id
@@ -709,7 +785,8 @@ def subject_detail(subject_id):
             'insights': row[5],
             'entry_date': row[6],
             'difficulty_rating': row[7],
-            'time_spent_minutes': row[8]
+            'time_spent_minutes': row[8],
+            'is_completed': bool(row[9]) if len(row) > 9 else False
         })
     
     conn.close()
@@ -822,7 +899,7 @@ def export_data():
     for row in c.fetchall():
         entry_id = row[0]
         c.execute('''SELECT el.id, el.exercise_number, el.methods_used, el.tips,
-                     el.problems_encountered, el.insights, el.difficulty_rating, el.time_spent_minutes
+                     el.problems_encountered, el.insights, el.difficulty_rating, el.time_spent_minutes, el.is_completed
                      FROM exercise_logs el WHERE el.daily_entry_id = ?''', (entry_id,))
         exercises = []
         for ex_row in c.fetchall():
@@ -839,6 +916,7 @@ def export_data():
                 'insights': ex_row[5],
                 'difficulty_rating': ex_row[6],
                 'time_spent_minutes': ex_row[7],
+                'is_completed': bool(ex_row[8]) if len(ex_row) > 8 else False,
                 'subjects': subjects
             })
         entries_data.append({

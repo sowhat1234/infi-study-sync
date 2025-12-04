@@ -6,65 +6,116 @@
     <title>רשומה - {{ entry_date }}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --primary-light: #3b82f6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #06b6d4;
+            --dark: #1f2937;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
             min-height: 100vh;
-            padding: 20px 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            color: var(--gray-900);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
         }
         
         .main-container {
             max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
         }
         
         .card-custom {
-            border-radius: 15px;
-            border: none;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
+            background: white;
+            border-radius: 20px;
+            border: 1px solid var(--gray-200);
+            box-shadow: var(--shadow);
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .card-custom:hover {
+            box-shadow: var(--shadow-lg);
         }
         
         .exercise-card {
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid var(--gray-200);
         }
         
         .exercise-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15) !important;
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-xl);
+            border-color: var(--primary-light);
+        }
+        
+        .exercise-card.border-success {
+            border-color: var(--success);
+            border-width: 2px;
         }
         
         .subject-chip {
             display: inline-block;
-            padding: 5px 12px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
             color: white;
             border-radius: 20px;
-            font-size: 0.85rem;
-            margin: 3px;
+            font-size: 0.875rem;
+            margin: 0.25rem;
+            font-weight: 500;
+            box-shadow: var(--shadow-sm);
         }
         
         .subject-chip .remove {
             cursor: pointer;
-            margin-right: 5px;
+            margin-right: 0.5rem;
             font-weight: bold;
+            opacity: 0.8;
         }
         
         .subject-chip .remove:hover {
-            opacity: 0.7;
+            opacity: 1;
         }
         
         .suggestions {
             position: absolute;
             z-index: 1000;
             background: white;
-            border: 1px solid #dee2e6;
-            border-radius: 8px;
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
             max-height: 200px;
             overflow-y: auto;
             width: 100%;
             display: none;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: var(--shadow-lg);
+            margin-top: 0.25rem;
         }
         
         .suggestions.show {
@@ -72,13 +123,14 @@
         }
         
         .suggestion-item {
-            padding: 10px 15px;
+            padding: 0.75rem 1rem;
             cursor: pointer;
-            border-bottom: 1px solid #f0f0f0;
+            border-bottom: 1px solid var(--gray-100);
+            transition: background 0.2s ease;
         }
         
         .suggestion-item:hover {
-            background: #f8f9fa;
+            background: var(--gray-50);
         }
         
         .suggestion-item:last-child {
@@ -89,11 +141,11 @@
             position: fixed;
             top: 20px;
             left: 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
             color: white;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            padding: 1.5rem;
+            border-radius: 16px;
+            box-shadow: var(--shadow-xl);
             z-index: 1000;
             animation: slideIn 0.5s ease-out;
             max-width: 300px;
@@ -117,14 +169,14 @@
         }
         
         .badge-notification-title {
-            font-weight: bold;
-            font-size: 18px;
+            font-weight: 700;
+            font-size: 1.125rem;
             margin-bottom: 5px;
             text-align: center;
         }
         
         .badge-notification-desc {
-            font-size: 14px;
+            font-size: 0.875rem;
             text-align: center;
             opacity: 0.9;
         }
@@ -133,30 +185,154 @@
             min-height: 100px;
         }
         
+        .form-control, .form-select {
+            border: 2px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+            outline: none;
+        }
+        
+        .form-label {
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+        }
+        
         .difficulty-stars {
-            font-size: 1.5rem;
+            font-size: 1.75rem;
             cursor: pointer;
+            display: flex;
+            gap: 0.25rem;
         }
         
         .difficulty-stars .star {
-            color: #ddd;
-            transition: color 0.2s;
+            color: var(--gray-300);
+            transition: all 0.2s ease;
         }
         
         .difficulty-stars .star.active {
-            color: #ffc107;
+            color: var(--warning);
+            transform: scale(1.1);
+        }
+        
+        .btn {
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+            border: none;
+            font-size: 0.95rem;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.3);
+        }
+        
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px -2px rgba(37, 99, 235, 0.4);
+        }
+        
+        .btn-secondary {
+            background: var(--gray-200);
+            color: var(--gray-700);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--gray-300);
+            transform: translateY(-2px);
+        }
+        
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+        }
+        
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+        }
+        
+        .btn-lg {
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+        }
+        
+        .card-header {
+            border-bottom: 1px solid var(--gray-200);
+            padding: 1.25rem 1.5rem;
+            font-weight: 700;
+        }
+        
+        .card-header.bg-success {
+            background: var(--success) !important;
+        }
+        
+        .card-body {
+            padding: 1.5rem;
+        }
+        
+        h1 {
+            font-size: 2.25rem;
+            font-weight: 800;
+            color: var(--gray-900);
+            margin-bottom: 1rem;
+        }
+        
+        h5 {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+        
+        h6 {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--gray-600);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
         }
     </style>
 </head>
 <body>
-    <div class="container main-container">
+    <div class="container main-container fade-in">
         <!-- Header -->
         <div class="card card-custom mb-4">
-            <div class="card-body p-4">
+            <div class="card-body">
                 <a href="{{ url_for('index') }}" class="btn btn-outline-primary mb-3">
                     <i class="bi bi-arrow-right"></i> חזרה ליומן
                 </a>
-                <h1 class="mb-3"><i class="bi bi-calendar3"></i> רשומה עבור {{ entry_date }}</h1>
+                <h1 class="mb-3"><i class="bi bi-calendar3 text-primary"></i> רשומה עבור {{ entry_date }}</h1>
                 
                 <div class="mb-3">
                     <label class="form-label fw-bold">הערות יומיות</label>
@@ -171,8 +347,8 @@
 
         <!-- Add Exercise Form -->
         <div class="card card-custom mb-4" id="exerciseForm" style="display: none;">
-            <div class="card-body p-4">
-                <h5 class="card-title mb-4"><i class="bi bi-plus-circle"></i> הוסף תרגיל</h5>
+            <div class="card-body">
+                <h5 class="card-title mb-4"><i class="bi bi-plus-circle text-primary"></i> הוסף תרגיל</h5>
                 {% if templates %}
                 <div class="mb-3">
                     <label class="form-label fw-bold">השתמש בתבנית</label>
@@ -195,7 +371,7 @@
                         
                         <div class="col-md-6">
                             <div class="form-floating">
-                                <textarea class="form-control" id="methodsUsed" placeholder="שיטות שנ� used" style="height: 120px"></textarea>
+                                <textarea class="form-control" id="methodsUsed" placeholder="שיטות שנעשה בהן שימוש" style="height: 120px"></textarea>
                                 <label for="methodsUsed">שיטות שנעשה בהן שימוש</label>
                             </div>
                         </div>
@@ -272,8 +448,8 @@
         <div id="exercisesList">
             {% if exercises %}
                 {% for exercise in exercises %}
-                <div class="card exercise-card card-custom" id="exercise-{{ exercise.id }}">
-                    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <div class="card exercise-card card-custom {% if exercise.is_completed %}border-success{% endif %}" id="exercise-{{ exercise.id }}">
+                    <div class="card-header {% if exercise.is_completed %}bg-success{% else %}bg-primary{% endif %} text-white d-flex justify-content-between align-items-center">
                         <h5 class="mb-0"><i class="bi bi-file-text"></i> תרגיל {{ exercise.exercise_number }}</h5>
                         <div>
                             {% if exercise.difficulty_rating %}
@@ -286,6 +462,9 @@
                             {% if exercise.time_spent_minutes %}
                             <span class="badge bg-info me-2"><i class="bi bi-clock"></i> {{ exercise.time_spent_minutes }} דק'</span>
                             {% endif %}
+                            <button class="btn btn-sm btn-light me-2" onclick="toggleComplete({{ exercise.id }})" title="{% if exercise.is_completed %}סמן כלא הושלם{% else %}סמן כהושלם{% endif %}">
+                                <i class="bi {% if exercise.is_completed %}bi-check-circle-fill{% else %}bi-circle{% endif %}"></i> {% if exercise.is_completed %}הושלם{% else %}לא הושלם{% endif %}
+                            </button>
                             <button class="btn btn-sm btn-light me-2" onclick="editExercise({{ exercise.id }})">
                                 <i class="bi bi-pencil"></i> ערוך
                             </button>
@@ -668,6 +847,22 @@
                     }
                 });
             }
+        }
+        
+        function toggleComplete(exerciseId) {
+            fetch(`/exercise/${exerciseId}/toggle-complete`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'}
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                }
+            })
+            .catch(err => {
+                alert('שגיאה בשינוי סטטוס התרגיל');
+            });
         }
         
         function removeSubjectChip(exerciseId, subject) {

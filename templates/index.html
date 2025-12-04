@@ -6,102 +6,387 @@
     <title>יומן לימודים</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --primary-light: #3b82f6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #06b6d4;
+            --dark: #1f2937;
+            --dark-light: #374151;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
             min-height: 100vh;
-            padding: 20px 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            color: var(--gray-900);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
         
         .main-container {
             max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
         }
         
+        /* Header */
         .header-card {
-            border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
-            border: none;
+            background: white;
+            border-radius: 24px;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--gray-200);
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
         }
         
+        .header-card:hover {
+            box-shadow: var(--shadow-xl);
+        }
+        
+        .header-card h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--gray-900);
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+        }
+        
+        .header-card p {
+            font-size: 1.125rem;
+            color: var(--gray-600);
+            margin-bottom: 0;
+            font-weight: 400;
+        }
+        
+        /* Stat Cards */
         .stat-card {
-            border-radius: 15px;
-            border: none;
-            transition: transform 0.2s, box-shadow 0.2s;
+            background: white;
+            border-radius: 20px;
+            border: 1px solid var(--gray-200);
+            box-shadow: var(--shadow);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             height: 100%;
+            padding: 1.75rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--primary);
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
         
         .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2) !important;
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-xl);
+            border-color: var(--primary-light);
         }
         
-        .streak-card {
-            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
-            color: white;
+        .stat-card:hover::before {
+            opacity: 1;
         }
         
         .stat-value {
-            font-size: 2.5rem;
-            font-weight: 700;
+            font-size: 3rem;
+            font-weight: 800;
             margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.03em;
         }
         
+        .stat-card .text-muted {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--gray-600);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .streak-card {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+            border: none;
+        }
+        
+        .streak-card .stat-value {
+            background: white;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: white;
+            background-clip: text;
+        }
+        
+        .streak-card .text-muted {
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        /* Badge Cards */
         .badge-mini {
-            border-radius: 12px;
-            padding: 15px;
+            border-radius: 16px;
+            padding: 1.25rem;
             text-align: center;
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
-            border: 2px solid #667eea;
-            transition: transform 0.2s;
+            background: white;
+            border: 2px solid var(--gray-200);
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-sm);
         }
         
         .badge-mini:hover {
-            transform: scale(1.05);
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary);
         }
         
         .badge-icon {
             font-size: 2.5rem;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.75rem;
+            display: block;
         }
         
+        /* Entry Cards */
         .entry-card {
-            border-radius: 15px;
-            border: none;
-            transition: transform 0.2s, box-shadow 0.2s;
+            background: white;
+            border-radius: 20px;
+            border: 1px solid var(--gray-200);
+            box-shadow: var(--shadow);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
-        }
-        
-        .entry-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2) !important;
-        }
-        
-        .progress-section {
-            border-radius: 15px;
-            border: none;
-        }
-        
-        .progress-bar-custom {
-            height: 30px;
-            border-radius: 15px;
+            margin-bottom: 1rem;
             overflow: hidden;
         }
         
+        .entry-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-xl);
+            border-color: var(--primary-light);
+        }
+        
+        .entry-card .card-body {
+            padding: 1.75rem;
+        }
+        
+        .entry-card h5 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 0.5rem;
+        }
+        
+        .entry-card .badge {
+            font-size: 0.875rem;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 12px;
+        }
+        
+        /* Progress Section */
+        .progress-section {
+            background: white;
+            border-radius: 20px;
+            border: 1px solid var(--gray-200);
+            box-shadow: var(--shadow);
+            padding: 2rem;
+        }
+        
+        .progress-bar-custom {
+            height: 36px;
+            border-radius: 18px;
+            overflow: hidden;
+            background: var(--gray-100);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+        }
+        
+        .progress-bar {
+            border-radius: 18px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: width 0.6s ease;
+        }
+        
+        /* Search Card */
         .search-card {
-            border-radius: 15px;
+            background: white;
+            border-radius: 20px;
+            border: 1px solid var(--gray-200);
+            box-shadow: var(--shadow);
+            padding: 2rem;
+        }
+        
+        /* Buttons */
+        .btn {
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            transition: all 0.2s ease;
             border: none;
+            font-size: 0.95rem;
+            letter-spacing: 0.01em;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.3);
+        }
+        
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px -2px rgba(37, 99, 235, 0.4);
+        }
+        
+        .btn-lg {
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+        }
+        
+        .btn-outline-primary {
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            background: transparent;
+        }
+        
+        .btn-outline-primary:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        /* Form Controls */
+        .form-control, .form-select {
+            border: 2px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+            outline: none;
+        }
+        
+        .form-label {
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+        }
+        
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+        
+        .empty-state i {
+            font-size: 4rem;
+            color: var(--gray-300);
+            margin-bottom: 1.5rem;
+        }
+        
+        .empty-state h3 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 1rem;
+        }
+        
+        .empty-state p {
+            font-size: 1.125rem;
+            color: var(--gray-600);
+            margin-bottom: 2rem;
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 1rem 0.5rem;
+            }
+            
+            .header-card {
+                padding: 1.5rem;
+            }
+            
+            .header-card h1 {
+                font-size: 1.75rem;
+            }
+            
+            .stat-value {
+                font-size: 2rem;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container main-container">
+    <div class="container main-container fade-in">
         <!-- Header -->
         <div class="card header-card mb-4">
-            <div class="card-body p-4">
+            <div class="card-body p-0">
                 <div class="d-flex justify-content-between align-items-center flex-wrap">
                     <div>
-                        <h1 class="mb-2"><i class="bi bi-journal-text"></i> יומן לימודים</h1>
+                        <h1 class="mb-2"><i class="bi bi-journal-text text-primary"></i> יומן לימודים</h1>
                         <p class="text-muted mb-0">עקוב אחר התרגילים והתקדמות הלמידה שלך</p>
                     </div>
                     <a href="{{ url_for('entry_detail', date_str=today_date) }}" class="btn btn-primary btn-lg">
@@ -113,34 +398,34 @@
 
         {% if stats %}
         <!-- Stats Summary -->
-        <div class="row g-3 mb-4">
+        <div class="row g-4 mb-4">
             <div class="col-md-3 col-sm-6">
-                <div class="card stat-card shadow-sm">
-                    <div class="card-body text-center">
+                <div class="stat-card">
+                    <div class="card-body p-0 text-center">
                         <div class="stat-value text-primary">{{ stats.total_exercises }}</div>
                         <div class="text-muted">סה"כ תרגילים</div>
                     </div>
                 </div>
             </div>
             <div class="col-md-3 col-sm-6">
-                <div class="card stat-card shadow-sm">
-                    <div class="card-body text-center">
+                <div class="stat-card">
+                    <div class="card-body p-0 text-center">
                         <div class="stat-value text-info">{{ stats.total_days }}</div>
                         <div class="text-muted">ימים מתועדים</div>
                     </div>
                 </div>
             </div>
             <div class="col-md-3 col-sm-6">
-                <div class="card stat-card streak-card shadow-sm">
-                    <div class="card-body text-center">
+                <div class="stat-card streak-card">
+                    <div class="card-body p-0 text-center">
                         <div class="stat-value">🔥 {{ stats.current_streak }}</div>
                         <div>רצף ימים</div>
                     </div>
                 </div>
             </div>
             <div class="col-md-3 col-sm-6">
-                <div class="card stat-card shadow-sm">
-                    <div class="card-body text-center">
+                <div class="stat-card">
+                    <div class="card-body p-0 text-center">
                         <div class="stat-value text-warning">{{ stats.badges_count }}</div>
                         <div class="text-muted">תגים נפתחו</div>
                     </div>
@@ -150,9 +435,9 @@
 
         <!-- Recent Badges -->
         {% if stats.recent_badges %}
-        <div class="card mb-4 shadow-sm">
-            <div class="card-body">
-                <h5 class="card-title mb-3"><i class="bi bi-trophy"></i> תגים אחרונים</h5>
+        <div class="card mb-4" style="background: white; border-radius: 20px; border: 1px solid var(--gray-200); box-shadow: var(--shadow); padding: 2rem;">
+            <div class="card-body p-0">
+                <h5 class="card-title mb-4" style="font-weight: 700; font-size: 1.25rem;"><i class="bi bi-trophy text-warning"></i> תגים אחרונים</h5>
                 <div class="d-flex flex-wrap gap-3">
                     {% for badge in stats.recent_badges[:5] %}
                     <div class="badge-mini">
@@ -161,7 +446,7 @@
                     </div>
                     {% endfor %}
                 </div>
-                <div class="mt-3">
+                <div class="mt-4">
                     <a href="{{ url_for('stats') }}" class="btn btn-outline-primary btn-sm">
                         <i class="bi bi-graph-up"></i> צפה בכל הסטטיסטיקות
                     </a>
@@ -171,9 +456,9 @@
         {% endif %}
 
         <!-- Progress Section -->
-        <div class="card progress-section mb-4 shadow-sm">
-            <div class="card-body">
-                <h5 class="card-title mb-3"><i class="bi bi-speedometer2"></i> התקדמות למיילסטונים הבאים</h5>
+        <div class="card progress-section mb-4">
+            <div class="card-body p-0">
+                <h5 class="card-title mb-4" style="font-weight: 700; font-size: 1.25rem;"><i class="bi bi-speedometer2 text-primary"></i> התקדמות למיילסטונים הבאים</h5>
                 {% set milestones = [5, 10, 50, 100] %}
                 {% set next_exercise_badge = None %}
                 {% for milestone in milestones %}
@@ -182,15 +467,15 @@
                     {% endif %}
                 {% endfor %}
                 {% if next_exercise_badge %}
-                <div class="mb-3">
+                <div class="mb-4">
                     <div class="d-flex justify-content-between mb-2">
-                        <span class="small text-muted">תג התרגיל הבא ({{ next_exercise_badge }} תרגילים)</span>
+                        <span class="small text-muted fw-semibold">תג התרגיל הבא ({{ next_exercise_badge }} תרגילים)</span>
                         <span class="small fw-bold">{{ stats.total_exercises }} / {{ next_exercise_badge }}</span>
                     </div>
                     {% set progress_pct = (stats.total_exercises / next_exercise_badge * 100) | round(0) | int %}
                     {% if progress_pct > 100 %}{% set progress_pct = 100 %}{% endif %}
                     <div class="progress progress-bar-custom">
-                        <div class="progress-bar bg-gradient" role="progressbar" style="width: {{ progress_pct }}%">
+                        <div class="progress-bar bg-primary" role="progressbar" style="width: {{ progress_pct }}%">
                             {{ progress_pct }}%
                         </div>
                     </div>
@@ -207,13 +492,13 @@
                 {% if next_streak_badge %}
                 <div>
                     <div class="d-flex justify-content-between mb-2">
-                        <span class="small text-muted">תג הרצף הבא ({{ next_streak_badge }} ימים)</span>
+                        <span class="small text-muted fw-semibold">תג הרצף הבא ({{ next_streak_badge }} ימים)</span>
                         <span class="small fw-bold">{{ stats.current_streak }} / {{ next_streak_badge }}</span>
                     </div>
                     {% set streak_progress = (stats.current_streak / next_streak_badge * 100) | round(0) | int %}
                     {% if streak_progress > 100 %}{% set streak_progress = 100 %}{% endif %}
                     <div class="progress progress-bar-custom">
-                        <div class="progress-bar bg-danger" role="progressbar" style="width: {{ streak_progress }}%">
+                        <div class="progress-bar bg-warning" role="progressbar" style="width: {{ streak_progress }}%">
                             {{ streak_progress }}%
                         </div>
                     </div>
@@ -224,8 +509,8 @@
         {% endif %}
 
         <!-- Search Filters -->
-        <div class="card search-card mb-4 shadow-sm">
-            <div class="card-body">
+        <div class="card search-card mb-4">
+            <div class="card-body p-0">
                 <form method="GET" action="{{ url_for('search') }}" id="searchForm">
                     <div class="row g-3">
                         <div class="col-md-3 col-sm-6">
@@ -286,12 +571,12 @@
             <div class="row g-3">
                 {% for entry in entries %}
                 <div class="col-12">
-                    <div class="card entry-card shadow-sm" onclick="window.location.href='{{ url_for('entry_detail', date_str=entry.date) }}'">
+                    <div class="card entry-card" onclick="window.location.href='{{ url_for('entry_detail', date_str=entry.date) }}'">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-center flex-wrap">
                                 <div>
                                     <h5 class="card-title mb-1">
-                                        <i class="bi bi-calendar3"></i> {{ entry.date }}
+                                        <i class="bi bi-calendar3 text-primary"></i> {{ entry.date }}
                                     </h5>
                                     {% if entry.notes %}
                                     <p class="text-muted mb-0 small">{{ entry.notes[:100] }}{% if entry.notes|length > 100 %}...{% endif %}</p>
@@ -307,9 +592,9 @@
                 {% endfor %}
             </div>
         {% else %}
-            <div class="card shadow-sm">
-                <div class="card-body text-center py-5">
-                    <i class="bi bi-journal-x display-1 text-muted mb-3"></i>
+            <div class="card" style="background: white; border-radius: 20px; border: 1px solid var(--gray-200); box-shadow: var(--shadow);">
+                <div class="card-body empty-state">
+                    <i class="bi bi-journal-x"></i>
                     <h3 class="mb-3">אין רשומות עדיין</h3>
                     <p class="text-muted mb-4">התחל לעקוב אחר התרגילים שלך על ידי יצירת הרשומה הראשונה!</p>
                     <a href="{{ url_for('entry_detail', date_str=today_date) }}" class="btn btn-primary btn-lg">
