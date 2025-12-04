@@ -1,166 +1,83 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="he" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ subject_name }} - Subjects</title>
+    <title>{{ subject_name }} - נושאים</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            padding: 20px;
+            padding: 20px 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
+        .main-container {
+            max-width: 1200px;
         }
         
-        .header {
-            background: white;
-            padding: 30px;
+        .card-custom {
             border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            margin-bottom: 30px;
-        }
-        
-        .back-link {
-            color: #667eea;
-            text-decoration: none;
-            margin-bottom: 15px;
-            display: inline-block;
-            font-weight: 600;
-        }
-        
-        .back-link:hover {
-            text-decoration: underline;
-        }
-        
-        h1 {
-            color: #333;
-            margin-bottom: 10px;
-        }
-        
-        .exercise-card {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border: none;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
             margin-bottom: 20px;
-        }
-        
-        .exercise-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #f0f0f0;
-        }
-        
-        .exercise-number {
-            font-size: 24px;
-            font-weight: 600;
-            color: #667eea;
-        }
-        
-        .exercise-date {
-            color: #666;
-            font-size: 14px;
-        }
-        
-        .exercise-field {
-            margin-bottom: 20px;
-        }
-        
-        .exercise-field label {
-            display: block;
-            margin-bottom: 5px;
-            color: #333;
-            font-weight: 600;
-            font-size: 14px;
-        }
-        
-        .exercise-field .field-content {
-            color: #666;
-            font-size: 14px;
-            line-height: 1.6;
-            white-space: pre-wrap;
-        }
-        
-        .exercise-field .field-content.empty {
-            color: #999;
-            font-style: italic;
-        }
-        
-        .empty-state {
-            background: white;
-            padding: 60px;
-            border-radius: 15px;
-            text-align: center;
-            color: #666;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <a href="{{ url_for('subjects_list') }}" class="back-link">← Back to Subjects</a>
-            <h1>{{ subject_name }}</h1>
-            <p style="color: #666;">All exercises tagged with this subject</p>
+    <div class="container main-container">
+        <div class="card card-custom mb-4">
+            <div class="card-body p-4">
+                <a href="{{ url_for('subjects_list') }}" class="btn btn-outline-primary mb-3">
+                    <i class="bi bi-arrow-right"></i> חזרה לנושאים
+                </a>
+                <h1 class="mb-2"><i class="bi bi-tag"></i> {{ subject_name }}</h1>
+                <p class="text-muted mb-0">כל התרגילים המתויגים בנושא זה</p>
+            </div>
         </div>
         
         {% if exercises %}
             {% for exercise in exercises %}
-            <div class="exercise-card">
-                <div class="exercise-header">
-                    <div class="exercise-number">Exercise {{ exercise.exercise_number }}</div>
-                    <div class="exercise-date">{{ exercise.entry_date }}</div>
+            <div class="card card-custom">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="bi bi-file-text"></i> תרגיל {{ exercise.exercise_number }}</h5>
+                    <span class="badge bg-light text-dark">{{ exercise.entry_date }}</span>
                 </div>
-                
-                <div class="exercise-field">
-                    <label>Methods Used</label>
-                    <div class="field-content {% if not exercise.methods_used %}empty{% endif %}">
-                        {{ exercise.methods_used or '(none)' }}
-                    </div>
-                </div>
-                
-                <div class="exercise-field">
-                    <label>Tips</label>
-                    <div class="field-content {% if not exercise.tips %}empty{% endif %}">
-                        {{ exercise.tips or '(none)' }}
-                    </div>
-                </div>
-                
-                <div class="exercise-field">
-                    <label>Problems Encountered</label>
-                    <div class="field-content {% if not exercise.problems_encountered %}empty{% endif %}">
-                        {{ exercise.problems_encountered or '(none)' }}
-                    </div>
-                </div>
-                
-                <div class="exercise-field">
-                    <label>Insights</label>
-                    <div class="field-content {% if not exercise.insights %}empty{% endif %}">
-                        {{ exercise.insights or '(none)' }}
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <h6 class="text-muted mb-2"><i class="bi bi-gear"></i> שיטות שנעשה בהן שימוש</h6>
+                            <p class="mb-3">{{ exercise.methods_used or '<span class="text-muted fst-italic">(אין)</span>' | safe }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-muted mb-2"><i class="bi bi-lightbulb"></i> טיפים</h6>
+                            <p class="mb-3">{{ exercise.tips or '<span class="text-muted fst-italic">(אין)</span>' | safe }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-muted mb-2"><i class="bi bi-exclamation-triangle"></i> בעיות שנתקלת בהן</h6>
+                            <p class="mb-3">{{ exercise.problems_encountered or '<span class="text-muted fst-italic">(אין)</span>' | safe }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-muted mb-2"><i class="bi bi-lightbulb-fill"></i> תובנות</h6>
+                            <p class="mb-3">{{ exercise.insights or '<span class="text-muted fst-italic">(אין)</span>' | safe }}</p>
+                        </div>
                     </div>
                 </div>
             </div>
             {% endfor %}
         {% else %}
-        <div class="empty-state">
-            <h2>No exercises found</h2>
-            <p>No exercises have been tagged with this subject yet.</p>
+        <div class="card card-custom">
+            <div class="card-body text-center py-5">
+                <i class="bi bi-file-text display-1 text-muted mb-3"></i>
+                <h3 class="mb-3">לא נמצאו תרגילים</h3>
+                <p class="text-muted">אין תרגילים שסומנו עם נושא זה עדיין.</p>
+            </div>
         </div>
         {% endif %}
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-

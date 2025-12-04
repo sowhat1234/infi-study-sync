@@ -1,477 +1,360 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="he" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Study Journal</title>
+    <title>יומן לימודים</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            padding: 20px;
+            padding: 20px 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
+        .main-container {
+            max-width: 1400px;
         }
         
-        header {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            margin-bottom: 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        h1 {
-            color: #333;
-            margin-bottom: 5px;
-        }
-        
-        .subtitle {
-            color: #666;
-            font-size: 16px;
-        }
-        
-        .btn {
-            display: inline-block;
-            padding: 12px 24px;
-            background: #667eea;
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: 600;
-            transition: transform 0.2s, box-shadow 0.2s;
+        .header-card {
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
             border: none;
-            cursor: pointer;
-            font-size: 14px;
         }
         
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-        }
-        
-        .btn-secondary {
-            background: #6c757d;
-        }
-        
-        .search-filters {
-            background: white;
-            padding: 20px;
+        .stat-card {
             border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
+            border: none;
+            transition: transform 0.2s, box-shadow 0.2s;
+            height: 100%;
         }
         
-        .filter-row {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-            align-items: end;
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2) !important;
         }
         
-        .form-group {
-            flex: 1;
-            min-width: 150px;
+        .streak-card {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            color: white;
         }
         
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            color: #333;
-            font-weight: 600;
-            font-size: 14px;
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
         }
         
-        .form-group input,
-        .form-group select {
-            width: 100%;
-            padding: 10px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 14px;
+        .badge-mini {
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            border: 2px solid #667eea;
+            transition: transform 0.2s;
         }
         
-        .form-group input:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: #667eea;
+        .badge-mini:hover {
+            transform: scale(1.05);
         }
         
-        .entries-list {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
+        .badge-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
         }
         
         .entry-card {
-            background: white;
-            padding: 25px;
             border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border: none;
             transition: transform 0.2s, box-shadow 0.2s;
             cursor: pointer;
         }
         
         .entry-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-        }
-        
-        .entry-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        
-        .entry-date {
-            font-size: 24px;
-            font-weight: 600;
-            color: #333;
-        }
-        
-        .entry-stats {
-            color: #666;
-            font-size: 14px;
-        }
-        
-        .entry-notes {
-            color: #666;
-            font-size: 14px;
-            margin-top: 10px;
-            font-style: italic;
-        }
-        
-        .empty-state {
-            background: white;
-            padding: 60px;
-            border-radius: 15px;
-            text-align: center;
-            color: #666;
-        }
-        
-        .empty-state h2 {
-            margin-bottom: 10px;
-            color: #333;
-        }
-        
-        .nav-links {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
-        }
-        
-        .nav-links a {
-            color: #667eea;
-            text-decoration: none;
-            font-weight: 600;
-        }
-        
-        .nav-links a:hover {
-            text-decoration: underline;
-        }
-        
-        .stats-summary {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-        }
-        
-        .stat-item {
-            text-align: center;
-        }
-        
-        .stat-value {
-            font-size: 32px;
-            font-weight: bold;
-            color: #667eea;
-            margin-bottom: 5px;
-        }
-        
-        .stat-label {
-            color: #666;
-            font-size: 14px;
-        }
-        
-        .streak-display {
-            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 15px;
-            text-align: center;
-        }
-        
-        .streak-display .stat-value {
-            color: white;
-            font-size: 48px;
-        }
-        
-        .streak-display .stat-label {
-            color: rgba(255,255,255,0.9);
-        }
-        
-        .badges-preview {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
-        }
-        
-        .badges-preview h3 {
-            color: #333;
-            margin-bottom: 15px;
-        }
-        
-        .badges-list {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-        
-        .badge-mini {
-            text-align: center;
-            padding: 15px;
-            border-radius: 10px;
-            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
-            border: 2px solid #667eea;
-            min-width: 100px;
-        }
-        
-        .badge-mini-icon {
-            font-size: 32px;
-            margin-bottom: 5px;
-        }
-        
-        .badge-mini-name {
-            font-size: 12px;
-            font-weight: 600;
-            color: #333;
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2) !important;
         }
         
         .progress-section {
-            background: white;
-            padding: 25px;
             border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
+            border: none;
         }
         
-        .progress-section h3 {
-            color: #333;
-            margin-bottom: 15px;
-        }
-        
-        .progress-item {
-            margin-bottom: 15px;
-        }
-        
-        .progress-item-label {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 5px;
-            font-size: 14px;
-            color: #666;
-        }
-        
-        .progress-bar {
-            width: 100%;
-            height: 25px;
-            background: #e0e0e0;
-            border-radius: 12px;
+        .progress-bar-custom {
+            height: 30px;
+            border-radius: 15px;
             overflow: hidden;
         }
         
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #667eea, #764ba2);
-            transition: width 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 600;
-            font-size: 11px;
+        .search-card {
+            border-radius: 15px;
+            border: none;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <div>
-                <h1>📚 Study Journal</h1>
-                <p class="subtitle">Track your exercises and learning progress</p>
-            </div>
-            <div>
-                <a href="{{ url_for('entry_detail', date_str=today_date) }}" class="btn">New Entry Today</a>
-            </div>
-        </header>
-        
-        {% if stats %}
-        <div class="stats-summary">
-            <div class="stat-item">
-                <div class="stat-value">{{ stats.total_exercises }}</div>
-                <div class="stat-label">Total Exercises</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-value">{{ stats.total_days }}</div>
-                <div class="stat-label">Days Logged</div>
-            </div>
-            <div class="streak-display">
-                <div class="stat-value">🔥 {{ stats.current_streak }}</div>
-                <div class="stat-label">Day Streak</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-value">{{ stats.badges_count }}</div>
-                <div class="stat-label">Badges Unlocked</div>
+    <div class="container main-container">
+        <!-- Header -->
+        <div class="card header-card mb-4">
+            <div class="card-body p-4">
+                <div class="d-flex justify-content-between align-items-center flex-wrap">
+                    <div>
+                        <h1 class="mb-2"><i class="bi bi-journal-text"></i> יומן לימודים</h1>
+                        <p class="text-muted mb-0">עקוב אחר התרגילים והתקדמות הלמידה שלך</p>
+                    </div>
+                    <a href="{{ url_for('entry_detail', date_str=today_date) }}" class="btn btn-primary btn-lg">
+                        <i class="bi bi-plus-circle"></i> רשומה חדשה להיום
+                    </a>
+                </div>
             </div>
         </div>
-        
-        {% if stats.recent_badges %}
-        <div class="badges-preview">
-            <h3>✨ Recent Badges</h3>
-            <div class="badges-list">
-                {% for badge in stats.recent_badges[:5] %}
-                <div class="badge-mini">
-                    <div class="badge-mini-icon">{{ badge.icon }}</div>
-                    <div class="badge-mini-name">{{ badge.name }}</div>
+
+        {% if stats %}
+        <!-- Stats Summary -->
+        <div class="row g-3 mb-4">
+            <div class="col-md-3 col-sm-6">
+                <div class="card stat-card shadow-sm">
+                    <div class="card-body text-center">
+                        <div class="stat-value text-primary">{{ stats.total_exercises }}</div>
+                        <div class="text-muted">סה"כ תרגילים</div>
+                    </div>
                 </div>
-                {% endfor %}
             </div>
-            <div style="margin-top: 15px;">
-                <a href="{{ url_for('stats') }}" class="btn btn-secondary" style="font-size: 12px; padding: 8px 16px;">View All Stats →</a>
+            <div class="col-md-3 col-sm-6">
+                <div class="card stat-card shadow-sm">
+                    <div class="card-body text-center">
+                        <div class="stat-value text-info">{{ stats.total_days }}</div>
+                        <div class="text-muted">ימים מתועדים</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="card stat-card streak-card shadow-sm">
+                    <div class="card-body text-center">
+                        <div class="stat-value">🔥 {{ stats.current_streak }}</div>
+                        <div>רצף ימים</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="card stat-card shadow-sm">
+                    <div class="card-body text-center">
+                        <div class="stat-value text-warning">{{ stats.badges_count }}</div>
+                        <div class="text-muted">תגים נפתחו</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Badges -->
+        {% if stats.recent_badges %}
+        <div class="card mb-4 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title mb-3"><i class="bi bi-trophy"></i> תגים אחרונים</h5>
+                <div class="d-flex flex-wrap gap-3">
+                    {% for badge in stats.recent_badges[:5] %}
+                    <div class="badge-mini">
+                        <div class="badge-icon">{{ badge.icon }}</div>
+                        <div class="fw-bold small">{{ badge.name }}</div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="mt-3">
+                    <a href="{{ url_for('stats') }}" class="btn btn-outline-primary btn-sm">
+                        <i class="bi bi-graph-up"></i> צפה בכל הסטטיסטיקות
+                    </a>
+                </div>
             </div>
         </div>
         {% endif %}
-        
-        <div class="progress-section">
-            <h3>Progress to Next Milestones</h3>
-            {% set milestones = [5, 10, 50, 100] %}
-            {% set next_exercise_badge = None %}
-            {% for milestone in milestones %}
-                {% if milestone > stats.total_exercises and not next_exercise_badge %}
-                    {% set next_exercise_badge = milestone %}
-                {% endif %}
-            {% endfor %}
-            {% if next_exercise_badge %}
-            <div class="progress-item">
-                <div class="progress-item-label">
-                    <span>Next Exercise Badge ({{ next_exercise_badge }} exercises)</span>
-                    <span>{{ stats.total_exercises }} / {{ next_exercise_badge }}</span>
-                </div>
-                <div class="progress-bar">
+
+        <!-- Progress Section -->
+        <div class="card progress-section mb-4 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title mb-3"><i class="bi bi-speedometer2"></i> התקדמות למיילסטונים הבאים</h5>
+                {% set milestones = [5, 10, 50, 100] %}
+                {% set next_exercise_badge = None %}
+                {% for milestone in milestones %}
+                    {% if milestone > stats.total_exercises and not next_exercise_badge %}
+                        {% set next_exercise_badge = milestone %}
+                    {% endif %}
+                {% endfor %}
+                {% if next_exercise_badge %}
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="small text-muted">תג התרגיל הבא ({{ next_exercise_badge }} תרגילים)</span>
+                        <span class="small fw-bold">{{ stats.total_exercises }} / {{ next_exercise_badge }}</span>
+                    </div>
                     {% set progress_pct = (stats.total_exercises / next_exercise_badge * 100) | round(0) | int %}
                     {% if progress_pct > 100 %}{% set progress_pct = 100 %}{% endif %}
-                    <div class="progress-fill" style="width: {{ progress_pct }}%">
-                        {{ progress_pct }}%
+                    <div class="progress progress-bar-custom">
+                        <div class="progress-bar bg-gradient" role="progressbar" style="width: {{ progress_pct }}%">
+                            {{ progress_pct }}%
+                        </div>
                     </div>
                 </div>
-            </div>
-            {% endif %}
-            
-            {% set streak_milestones = [7, 30] %}
-            {% set next_streak_badge = None %}
-            {% for milestone in streak_milestones %}
-                {% if milestone > stats.current_streak and not next_streak_badge %}
-                    {% set next_streak_badge = milestone %}
                 {% endif %}
-            {% endfor %}
-            {% if next_streak_badge %}
-            <div class="progress-item">
-                <div class="progress-item-label">
-                    <span>Next Streak Badge ({{ next_streak_badge }} days)</span>
-                    <span>{{ stats.current_streak }} / {{ next_streak_badge }}</span>
-                </div>
-                <div class="progress-bar">
+                
+                {% set streak_milestones = [7, 30] %}
+                {% set next_streak_badge = None %}
+                {% for milestone in streak_milestones %}
+                    {% if milestone > stats.current_streak and not next_streak_badge %}
+                        {% set next_streak_badge = milestone %}
+                    {% endif %}
+                {% endfor %}
+                {% if next_streak_badge %}
+                <div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="small text-muted">תג הרצף הבא ({{ next_streak_badge }} ימים)</span>
+                        <span class="small fw-bold">{{ stats.current_streak }} / {{ next_streak_badge }}</span>
+                    </div>
                     {% set streak_progress = (stats.current_streak / next_streak_badge * 100) | round(0) | int %}
                     {% if streak_progress > 100 %}{% set streak_progress = 100 %}{% endif %}
-                    <div class="progress-fill" style="width: {{ streak_progress }}%">
-                        {{ streak_progress }}%
+                    <div class="progress progress-bar-custom">
+                        <div class="progress-bar bg-danger" role="progressbar" style="width: {{ streak_progress }}%">
+                            {{ streak_progress }}%
+                        </div>
                     </div>
                 </div>
+                {% endif %}
             </div>
-            {% endif %}
         </div>
         {% endif %}
-        
-        <div class="search-filters">
-            <form method="GET" action="{{ url_for('search') }}" id="searchForm">
-                <div class="filter-row">
-                    <div class="form-group">
-                        <label>Search Exercise #</label>
-                        <input type="number" name="q" placeholder="e.g., 76" value="{{ search_query or '' }}">
+
+        <!-- Search Filters -->
+        <div class="card search-card mb-4 shadow-sm">
+            <div class="card-body">
+                <form method="GET" action="{{ url_for('search') }}" id="searchForm">
+                    <div class="row g-3">
+                        <div class="col-md-3 col-sm-6">
+                            <label class="form-label small fw-bold">חיפוש תרגיל / תוכן</label>
+                            <input type="text" class="form-control" name="q" placeholder="חיפוש בתרגילים, שיטות, טיפים..." value="{{ search_query or '' }}">
+                        </div>
+                        <div class="col-md-3 col-sm-6">
+                            <label class="form-label small fw-bold">נושא</label>
+                            <select class="form-select" name="subject">
+                                <option value="">כל הנושאים</option>
+                                {% for subject in subjects %}
+                                <option value="{{ subject.id }}" {% if selected_subject == subject.id %}selected{% endif %}>
+                                    {{ subject.name }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-2 col-sm-6">
+                            <label class="form-label small fw-bold">מתאריך</label>
+                            <input type="date" class="form-control" name="date_from" value="{{ date_from or '' }}">
+                        </div>
+                        <div class="col-md-2 col-sm-6">
+                            <label class="form-label small fw-bold">עד תאריך</label>
+                            <input type="date" class="form-control" name="date_to" value="{{ date_to or '' }}">
+                        </div>
+                        <div class="col-md-2 col-sm-12 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary w-100 me-2">
+                                <i class="bi bi-search"></i> חפש
+                            </button>
+                            <a href="{{ url_for('index') }}" class="btn btn-outline-secondary">
+                                <i class="bi bi-x"></i>
+                            </a>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label>Subject</label>
-                        <select name="subject">
-                            <option value="">All Subjects</option>
-                            {% for subject in subjects %}
-                            <option value="{{ subject.id }}" {% if selected_subject == subject.id %}selected{% endif %}>
-                                {{ subject.name }}
-                            </option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>From Date</label>
-                        <input type="date" name="date_from" value="{{ date_from or '' }}">
-                    </div>
-                    <div class="form-group">
-                        <label>To Date</label>
-                        <input type="date" name="date_to" value="{{ date_to or '' }}">
-                    </div>
-                    <div class="form-group">
-                        <button type="submit" class="btn">Search</button>
-                        <a href="{{ url_for('index') }}" class="btn btn-secondary" style="margin-top: 5px; display: block; text-align: center;">Clear</a>
-                    </div>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
-        
-        <div class="nav-links">
-            <a href="{{ url_for('subjects_list') }}">View All Subjects</a>
-            <a href="{{ url_for('stats') }}">📊 Statistics Dashboard</a>
+
+        <!-- Navigation Links -->
+        <div class="mb-4 d-flex flex-wrap gap-2">
+            <a href="{{ url_for('subjects_list') }}" class="btn btn-outline-primary">
+                <i class="bi bi-tags"></i> צפה בכל הנושאים
+            </a>
+            <a href="{{ url_for('stats') }}" class="btn btn-outline-info">
+                <i class="bi bi-graph-up"></i> לוח סטטיסטיקות
+            </a>
+            <a href="{{ url_for('export_data') }}" class="btn btn-outline-success">
+                <i class="bi bi-download"></i> ייצא נתונים
+            </a>
+            <label class="btn btn-outline-warning" style="cursor: pointer;">
+                <i class="bi bi-upload"></i> ייבא נתונים
+                <input type="file" id="importFile" accept=".json" style="display: none;" onchange="importData()">
+            </label>
         </div>
-        
-        <div class="entries-list">
-            {% if entries %}
+
+        <!-- Entries List -->
+        {% if entries %}
+            <div class="row g-3">
                 {% for entry in entries %}
-                <div class="entry-card" onclick="window.location.href='{{ url_for('entry_detail', date_str=entry.date) }}'">
-                    <div class="entry-header">
-                        <div class="entry-date">{{ entry.date }}</div>
-                        <div class="entry-stats">{{ entry.exercise_count }} exercise{{ 's' if entry.exercise_count != 1 else '' }}</div>
+                <div class="col-12">
+                    <div class="card entry-card shadow-sm" onclick="window.location.href='{{ url_for('entry_detail', date_str=entry.date) }}'">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center flex-wrap">
+                                <div>
+                                    <h5 class="card-title mb-1">
+                                        <i class="bi bi-calendar3"></i> {{ entry.date }}
+                                    </h5>
+                                    {% if entry.notes %}
+                                    <p class="text-muted mb-0 small">{{ entry.notes[:100] }}{% if entry.notes|length > 100 %}...{% endif %}</p>
+                                    {% endif %}
+                                </div>
+                                <div class="text-end">
+                                    <span class="badge bg-primary fs-6">{{ entry.exercise_count }} תרגיל{{ 'ים' if entry.exercise_count != 1 else '' }}</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    {% if entry.notes %}
-                    <div class="entry-notes">{{ entry.notes }}</div>
-                    {% endif %}
                 </div>
                 {% endfor %}
-            {% else %}
-                <div class="empty-state">
-                    <h2>No entries yet</h2>
-                    <p>Start tracking your exercises by creating your first entry!</p>
-                    <a href="{{ url_for('entry_detail', date_str=today_date) }}" class="btn" style="margin-top: 20px;">Create Entry for Today</a>
+            </div>
+        {% else %}
+            <div class="card shadow-sm">
+                <div class="card-body text-center py-5">
+                    <i class="bi bi-journal-x display-1 text-muted mb-3"></i>
+                    <h3 class="mb-3">אין רשומות עדיין</h3>
+                    <p class="text-muted mb-4">התחל לעקוב אחר התרגילים שלך על ידי יצירת הרשומה הראשונה!</p>
+                    <a href="{{ url_for('entry_detail', date_str=today_date) }}" class="btn btn-primary btn-lg">
+                        <i class="bi bi-plus-circle"></i> צור רשומה להיום
+                    </a>
                 </div>
-            {% endif %}
-        </div>
+            </div>
+        {% endif %}
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function importData() {
+            const fileInput = document.getElementById('importFile');
+            const file = fileInput.files[0];
+            
+            if (!file) return;
+            
+            if (!confirm('האם אתה בטוח שברצונך לייבא נתונים? זה עלול להוסיף רשומות כפולות.')) {
+                fileInput.value = '';
+                return;
+            }
+            
+            const formData = new FormData();
+            formData.append('file', file);
+            
+            fetch('/import', {
+                method: 'POST',
+                body: formData
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    alert(`יובאו בהצלחה ${data.imported} תרגילים!`);
+                    location.reload();
+                } else {
+                    alert('שגיאה ביבוא: ' + data.error);
+                }
+            })
+            .catch(err => {
+                alert('שגיאה ביבוא: ' + err.message);
+            });
+            
+            fileInput.value = '';
+        }
+    </script>
 </body>
 </html>

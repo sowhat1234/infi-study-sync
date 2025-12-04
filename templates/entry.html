@@ -1,241 +1,52 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="he" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Entry - {{ entry_date }}</title>
+    <title>רשומה - {{ entry_date }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            padding: 20px;
+            padding: 20px 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
+        .main-container {
+            max-width: 1200px;
         }
         
-        .header {
-            background: white;
-            padding: 30px;
+        .card-custom {
             border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            margin-bottom: 30px;
-        }
-        
-        .back-link {
-            color: #667eea;
-            text-decoration: none;
-            margin-bottom: 15px;
-            display: inline-block;
-            font-weight: 600;
-        }
-        
-        .back-link:hover {
-            text-decoration: underline;
-        }
-        
-        h1 {
-            color: #333;
-            margin-bottom: 15px;
-        }
-        
-        .notes-section {
-            margin-top: 20px;
-        }
-        
-        .notes-section label {
-            display: block;
-            margin-bottom: 5px;
-            color: #333;
-            font-weight: 600;
-        }
-        
-        .notes-section textarea {
-            width: 100%;
-            padding: 10px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 14px;
-            font-family: inherit;
-            resize: vertical;
-        }
-        
-        .notes-section textarea:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-        
-        .btn {
-            display: inline-block;
-            padding: 10px 20px;
-            background: #667eea;
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: 600;
-            transition: transform 0.2s, box-shadow 0.2s;
             border: none;
-            cursor: pointer;
-            font-size: 14px;
-            margin-top: 10px;
-        }
-        
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-        }
-        
-        .btn-danger {
-            background: #dc3545;
-        }
-        
-        .btn-secondary {
-            background: #6c757d;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
         }
         
         .exercise-card {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
         
-        .exercise-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #f0f0f0;
-        }
-        
-        .exercise-number {
-            font-size: 24px;
-            font-weight: 600;
-            color: #667eea;
-        }
-        
-        .exercise-actions {
-            display: flex;
-            gap: 10px;
-        }
-        
-        .exercise-field {
-            margin-bottom: 20px;
-        }
-        
-        .exercise-field label {
-            display: block;
-            margin-bottom: 5px;
-            color: #333;
-            font-weight: 600;
-            font-size: 14px;
-        }
-        
-        .exercise-field .field-content {
-            color: #666;
-            font-size: 14px;
-            line-height: 1.6;
-            white-space: pre-wrap;
-        }
-        
-        .exercise-field .field-content.empty {
-            color: #999;
-            font-style: italic;
-        }
-        
-        .subject-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 10px;
-        }
-        
-        .subject-tag {
-            background: #667eea;
-            color: white;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-        
-        .exercise-form {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            color: #333;
-            font-weight: 600;
-            font-size: 14px;
-        }
-        
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 10px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 14px;
-            font-family: inherit;
-        }
-        
-        .form-group input:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-        
-        .form-group textarea {
-            resize: vertical;
-            min-height: 80px;
-        }
-        
-        .form-group input[type="number"] {
-            width: 150px;
-        }
-        
-        .subject-input {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 5px;
+        .exercise-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15) !important;
         }
         
         .subject-chip {
-            background: #667eea;
-            color: white;
+            display: inline-block;
             padding: 5px 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
             border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 5px;
+            font-size: 0.85rem;
+            margin: 3px;
         }
         
         .subject-chip .remove {
             cursor: pointer;
+            margin-right: 5px;
             font-weight: bold;
         }
         
@@ -243,18 +54,17 @@
             opacity: 0.7;
         }
         
-        .subject-input input {
-            flex: 1;
-            min-width: 200px;
-        }
-        
         .suggestions {
-            background: #f8f9fa;
-            border: 1px solid #e0e0e0;
+            position: absolute;
+            z-index: 1000;
+            background: white;
+            border: 1px solid #dee2e6;
             border-radius: 8px;
-            padding: 10px;
-            margin-top: 5px;
+            max-height: 200px;
+            overflow-y: auto;
+            width: 100%;
             display: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
         
         .suggestions.show {
@@ -262,54 +72,23 @@
         }
         
         .suggestion-item {
-            padding: 5px 10px;
+            padding: 10px 15px;
             cursor: pointer;
-            border-radius: 4px;
+            border-bottom: 1px solid #f0f0f0;
         }
         
         .suggestion-item:hover {
-            background: #e0e0e0;
+            background: #f8f9fa;
         }
         
-        .alert {
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 15px;
-            display: none;
-        }
-        
-        .alert.success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-        
-        .alert.error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-        
-        .edit-mode {
-            display: none;
-        }
-        
-        .edit-mode.active {
-            display: block;
-        }
-        
-        .view-mode {
-            display: block;
-        }
-        
-            .view-mode.hidden {
-            display: none;
+        .suggestion-item:last-child {
+            border-bottom: none;
         }
         
         .badge-notification {
             position: fixed;
             top: 20px;
-            right: 20px;
+            left: 20px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             padding: 20px;
@@ -322,7 +101,7 @@
         
         @keyframes slideIn {
             from {
-                transform: translateX(400px);
+                transform: translateX(-400px);
                 opacity: 0;
             }
             to {
@@ -349,176 +128,302 @@
             text-align: center;
             opacity: 0.9;
         }
+        
+        .form-floating textarea {
+            min-height: 100px;
+        }
+        
+        .difficulty-stars {
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .difficulty-stars .star {
+            color: #ddd;
+            transition: color 0.2s;
+        }
+        
+        .difficulty-stars .star.active {
+            color: #ffc107;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <a href="{{ url_for('index') }}" class="back-link">← Back to Journal</a>
-            <h1>Entry for {{ entry_date }}</h1>
-            
-            <div class="notes-section">
-                <label>Daily Notes</label>
-                <textarea id="dailyNotes" rows="3" placeholder="Add general notes for this day...">{{ notes }}</textarea>
-                <button class="btn" onclick="saveNotes()">Save Notes</button>
-                <div class="alert" id="notesAlert"></div>
+    <div class="container main-container">
+        <!-- Header -->
+        <div class="card card-custom mb-4">
+            <div class="card-body p-4">
+                <a href="{{ url_for('index') }}" class="btn btn-outline-primary mb-3">
+                    <i class="bi bi-arrow-right"></i> חזרה ליומן
+                </a>
+                <h1 class="mb-3"><i class="bi bi-calendar3"></i> רשומה עבור {{ entry_date }}</h1>
+                
+                <div class="mb-3">
+                    <label class="form-label fw-bold">הערות יומיות</label>
+                    <textarea class="form-control" id="dailyNotes" rows="3" placeholder="הוסף הערות כלליות ליום זה...">{{ notes }}</textarea>
+                    <button class="btn btn-primary mt-2" onclick="saveNotes()">
+                        <i class="bi bi-save"></i> שמור הערות
+                    </button>
+                    <div class="alert alert-success mt-2" id="notesAlert" style="display: none;"></div>
+                </div>
             </div>
         </div>
-        
-        <div class="exercise-form" id="exerciseForm">
-            <h2 style="margin-bottom: 20px; color: #333;">Add Exercise</h2>
-            <form id="addExerciseForm">
-                <div class="form-group">
-                    <label>Exercise Number *</label>
-                    <input type="number" id="exerciseNumber" required>
+
+        <!-- Add Exercise Form -->
+        <div class="card card-custom mb-4" id="exerciseForm" style="display: none;">
+            <div class="card-body p-4">
+                <h5 class="card-title mb-4"><i class="bi bi-plus-circle"></i> הוסף תרגיל</h5>
+                {% if templates %}
+                <div class="mb-3">
+                    <label class="form-label fw-bold">השתמש בתבנית</label>
+                    <select class="form-select" id="templateSelect" onchange="loadTemplate()">
+                        <option value="">-- בחר תבנית --</option>
+                        {% for template in templates %}
+                        <option value="{{ template.id }}">{{ template.name }}</option>
+                        {% endfor %}
+                    </select>
                 </div>
-                
-                <div class="form-group">
-                    <label>Methods Used</label>
-                    <textarea id="methodsUsed" placeholder="What methods or techniques did you use?"></textarea>
-                </div>
-                
-                <div class="form-group">
-                    <label>Tips</label>
-                    <textarea id="tips" placeholder="Any tips or tricks you learned?"></textarea>
-                </div>
-                
-                <div class="form-group">
-                    <label>Problems Encountered</label>
-                    <textarea id="problems" placeholder="What difficulties did you face?"></textarea>
-                </div>
-                
-                <div class="form-group">
-                    <label>Insights / What You Figured Out</label>
-                    <textarea id="insights" placeholder="What did you discover or understand?"></textarea>
-                </div>
-                
-                <div class="form-group">
-                    <label>Subjects</label>
-                    <div class="subject-input">
-                        <input type="text" id="subjectInput" placeholder="Type subject name (e.g., limits, BW)">
-                        <div class="suggestions" id="suggestions"></div>
+                {% endif %}
+                <form id="addExerciseForm">
+                    <div class="row g-3">
+                        <div class="col-md-12">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="exerciseNumber" placeholder="מספר תרגיל" required>
+                                <label for="exerciseNumber">מספר תרגיל * <small class="text-muted">(לדוגמה: 76, 76א, תרגיל 76)</small></label>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <textarea class="form-control" id="methodsUsed" placeholder="שיטות שנ� used" style="height: 120px"></textarea>
+                                <label for="methodsUsed">שיטות שנעשה בהן שימוש</label>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <textarea class="form-control" id="tips" placeholder="טיפים" style="height: 120px"></textarea>
+                                <label for="tips">טיפים</label>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <textarea class="form-control" id="problems" placeholder="בעיות" style="height: 120px"></textarea>
+                                <label for="problems">בעיות שנתקלת בהן</label>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <textarea class="form-control" id="insights" placeholder="תובנות" style="height: 120px"></textarea>
+                                <label for="insights">תובנות / מה גילית</label>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">רמת קושי</label>
+                            <div class="difficulty-stars" id="difficultyStars">
+                                <span class="star" data-rating="1">⭐</span>
+                                <span class="star" data-rating="2">⭐</span>
+                                <span class="star" data-rating="3">⭐</span>
+                                <span class="star" data-rating="4">⭐</span>
+                                <span class="star" data-rating="5">⭐</span>
+                            </div>
+                            <input type="hidden" id="difficultyRating" value="">
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="number" class="form-control" id="timeSpent" placeholder="זמן (דקות)" min="0">
+                                <label for="timeSpent">זמן שהושקע (דקות)</label>
+                            </div>
+                        </div>
+                        
+                        <div class="col-12">
+                            <label class="form-label fw-bold">נושאים</label>
+                            <div class="position-relative">
+                                <input type="text" class="form-control" id="subjectInput" placeholder="הקלד שם נושא (לדוגמה: גבולות, BW)">
+                                <div class="suggestions" id="suggestions"></div>
+                            </div>
+                            <div id="subjectChips" class="mt-2"></div>
+                        </div>
+                        
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-circle"></i> הוסף תרגיל
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="cancelAddExercise()">
+                                <i class="bi bi-x-circle"></i> ביטול
+                            </button>
+                            <div class="alert mt-2" id="formAlert" style="display: none;"></div>
+                        </div>
                     </div>
-                    <div id="subjectChips" class="subject-tags"></div>
-                </div>
-                
-                <button type="submit" class="btn">Add Exercise</button>
-                <button type="button" class="btn btn-secondary" onclick="cancelAddExercise()">Cancel</button>
-                <div class="alert" id="formAlert"></div>
-            </form>
+                </form>
+            </div>
         </div>
-        
-        <button class="btn" onclick="showAddExercise()" id="showAddBtn" style="margin-bottom: 20px;">+ Add Exercise</button>
-        
+
+        <!-- Add Exercise Button -->
+        <button class="btn btn-primary btn-lg mb-4" onclick="showAddExercise()" id="showAddBtn">
+            <i class="bi bi-plus-circle"></i> הוסף תרגיל
+        </button>
+
+        <!-- Exercises List -->
         <div id="exercisesList">
             {% if exercises %}
                 {% for exercise in exercises %}
-                <div class="exercise-card" id="exercise-{{ exercise.id }}">
-                    <div class="exercise-header">
-                        <div class="exercise-number">Exercise {{ exercise.exercise_number }}</div>
-                        <div class="exercise-actions">
-                            <button class="btn btn-secondary" onclick="editExercise({{ exercise.id }})">Edit</button>
-                            <button class="btn btn-danger" onclick="deleteExercise({{ exercise.id }})">Delete</button>
+                <div class="card exercise-card card-custom" id="exercise-{{ exercise.id }}">
+                    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0"><i class="bi bi-file-text"></i> תרגיל {{ exercise.exercise_number }}</h5>
+                        <div>
+                            {% if exercise.difficulty_rating %}
+                            <span class="badge bg-warning text-dark me-2">
+                                {% for i in range(1, 6) %}
+                                    {% if i <= exercise.difficulty_rating %}⭐{% else %}☆{% endif %}
+                                {% endfor %}
+                            </span>
+                            {% endif %}
+                            {% if exercise.time_spent_minutes %}
+                            <span class="badge bg-info me-2"><i class="bi bi-clock"></i> {{ exercise.time_spent_minutes }} דק'</span>
+                            {% endif %}
+                            <button class="btn btn-sm btn-light me-2" onclick="editExercise({{ exercise.id }})">
+                                <i class="bi bi-pencil"></i> ערוך
+                            </button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteExercise({{ exercise.id }})">
+                                <i class="bi bi-trash"></i> מחק
+                            </button>
                         </div>
                     </div>
                     
-                    <div class="view-mode" id="view-{{ exercise.id }}">
-                        <div class="exercise-field">
-                            <label>Methods Used</label>
-                            <div class="field-content {% if not exercise.methods_used %}empty{% endif %}">
-                                {{ exercise.methods_used or '(none)' }}
+                    <div class="card-body" id="view-{{ exercise.id }}">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <h6 class="text-muted mb-2"><i class="bi bi-gear"></i> שיטות שנעשה בהן שימוש</h6>
+                                <p class="mb-3">{{ exercise.methods_used or '<span class="text-muted fst-italic">(אין)</span>' | safe }}</p>
                             </div>
-                        </div>
-                        
-                        <div class="exercise-field">
-                            <label>Tips</label>
-                            <div class="field-content {% if not exercise.tips %}empty{% endif %}">
-                                {{ exercise.tips or '(none)' }}
+                            <div class="col-md-6">
+                                <h6 class="text-muted mb-2"><i class="bi bi-lightbulb"></i> טיפים</h6>
+                                <p class="mb-3">{{ exercise.tips or '<span class="text-muted fst-italic">(אין)</span>' | safe }}</p>
                             </div>
-                        </div>
-                        
-                        <div class="exercise-field">
-                            <label>Problems Encountered</label>
-                            <div class="field-content {% if not exercise.problems_encountered %}empty{% endif %}">
-                                {{ exercise.problems_encountered or '(none)' }}
+                            <div class="col-md-6">
+                                <h6 class="text-muted mb-2"><i class="bi bi-exclamation-triangle"></i> בעיות שנתקלת בהן</h6>
+                                <p class="mb-3">{{ exercise.problems_encountered or '<span class="text-muted fst-italic">(אין)</span>' | safe }}</p>
                             </div>
-                        </div>
-                        
-                        <div class="exercise-field">
-                            <label>Insights</label>
-                            <div class="field-content {% if not exercise.insights %}empty{% endif %}">
-                                {{ exercise.insights or '(none)' }}
+                            <div class="col-md-6">
+                                <h6 class="text-muted mb-2"><i class="bi bi-lightbulb-fill"></i> תובנות</h6>
+                                <p class="mb-3">{{ exercise.insights or '<span class="text-muted fst-italic">(אין)</span>' | safe }}</p>
                             </div>
-                        </div>
-                        
-                        <div class="exercise-field">
-                            <label>Subjects</label>
-                            <div class="subject-tags">
-                                {% for subject in exercise.subjects %}
-                                <span class="subject-tag">{{ subject.name }}</span>
-                                {% endfor %}
-                                {% if not exercise.subjects %}
-                                <span style="color: #999; font-style: italic;">No subjects tagged</span>
+                            <div class="col-12">
+                                <h6 class="text-muted mb-2"><i class="bi bi-tags"></i> נושאים</h6>
+                                {% if exercise.subjects %}
+                                    {% for subject in exercise.subjects %}
+                                    <span class="subject-chip">{{ subject.name }}</span>
+                                    {% endfor %}
+                                {% else %}
+                                    <span class="text-muted fst-italic">אין נושאים מתויגים</span>
                                 {% endif %}
                             </div>
                         </div>
                     </div>
                     
-                    <div class="edit-mode" id="edit-{{ exercise.id }}">
+                    <div class="card-body" id="edit-{{ exercise.id }}" style="display: none;">
                         <form onsubmit="saveExercise({{ exercise.id }}); return false;">
-                            <div class="form-group">
-                                <label>Methods Used</label>
-                                <textarea id="edit-methods-{{ exercise.id }}">{{ exercise.methods_used or '' }}</textarea>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label>Tips</label>
-                                <textarea id="edit-tips-{{ exercise.id }}">{{ exercise.tips or '' }}</textarea>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label>Problems Encountered</label>
-                                <textarea id="edit-problems-{{ exercise.id }}">{{ exercise.problems_encountered or '' }}</textarea>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label>Insights</label>
-                                <textarea id="edit-insights-{{ exercise.id }}">{{ exercise.insights or '' }}</textarea>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label>Subjects</label>
-                                <div class="subject-input">
-                                    <input type="text" id="edit-subject-input-{{ exercise.id }}" placeholder="Type subject name">
-                                    <div class="suggestions" id="edit-suggestions-{{ exercise.id }}"></div>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <textarea class="form-control" id="edit-methods-{{ exercise.id }}" style="height: 100px">{{ exercise.methods_used or '' }}</textarea>
+                                        <label>שיטות שנעשה בהן שימוש</label>
+                                    </div>
                                 </div>
-                                <div id="edit-subject-chips-{{ exercise.id }}" class="subject-tags">
-                                    {% for subject in exercise.subjects %}
-                                    <span class="subject-chip">
-                                        {{ subject.name }}
-                                        <span class="remove" onclick="removeSubjectChip({{ exercise.id }}, '{{ subject.name }}')">×</span>
-                                    </span>
-                                    {% endfor %}
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <textarea class="form-control" id="edit-tips-{{ exercise.id }}" style="height: 100px">{{ exercise.tips or '' }}</textarea>
+                                        <label>טיפים</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <textarea class="form-control" id="edit-problems-{{ exercise.id }}" style="height: 100px">{{ exercise.problems_encountered or '' }}</textarea>
+                                        <label>בעיות שנתקלת בהן</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <textarea class="form-control" id="edit-insights-{{ exercise.id }}" style="height: 100px">{{ exercise.insights or '' }}</textarea>
+                                        <label>תובנות</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">רמת קושי</label>
+                                    <div class="difficulty-stars" id="edit-difficulty-{{ exercise.id }}">
+                                        {% for i in range(1, 6) %}
+                                        <span class="star {% if exercise.difficulty_rating and i <= exercise.difficulty_rating %}active{% endif %}" data-rating="{{ i }}">⭐</span>
+                                        {% endfor %}
+                                    </div>
+                                    <input type="hidden" id="edit-difficulty-rating-{{ exercise.id }}" value="{{ exercise.difficulty_rating or '' }}">
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="number" class="form-control" id="edit-time-{{ exercise.id }}" placeholder="זמן (דקות)" min="0" value="{{ exercise.time_spent_minutes or '' }}">
+                                        <label>זמן שהושקע (דקות)</label>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label fw-bold">נושאים</label>
+                                    <div class="position-relative">
+                                        <input type="text" class="form-control" id="edit-subject-input-{{ exercise.id }}" placeholder="הקלד שם נושא">
+                                        <div class="suggestions" id="edit-suggestions-{{ exercise.id }}"></div>
+                                    </div>
+                                    <div id="edit-subject-chips-{{ exercise.id }}" class="mt-2"></div>
+                                </div>
+                                <div class="col-12">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="bi bi-check-circle"></i> שמור
+                                    </button>
+                                    <button type="button" class="btn btn-secondary" onclick="cancelEdit({{ exercise.id }})">
+                                        <i class="bi bi-x-circle"></i> ביטול
+                                    </button>
                                 </div>
                             </div>
-                            
-                            <button type="submit" class="btn">Save</button>
-                            <button type="button" class="btn btn-secondary" onclick="cancelEdit({{ exercise.id }})">Cancel</button>
                         </form>
                     </div>
                 </div>
                 {% endfor %}
             {% else %}
-                <div class="exercise-card" style="text-align: center; color: #666;">
-                    <p>No exercises logged for this day yet. Add your first exercise above!</p>
+                <div class="card card-custom">
+                    <div class="card-body text-center py-5">
+                        <i class="bi bi-file-text display-1 text-muted mb-3"></i>
+                        <p class="text-muted">אין תרגילים מתועדים ליום זה עדיין. הוסף את התרגיל הראשון שלך למעלה!</p>
+                    </div>
                 </div>
             {% endif %}
         </div>
     </div>
-    
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         let selectedSubjects = [];
         let editSubjects = {};
+        let currentDifficulty = 0;
+        let editDifficulties = {};
+        
+        // Difficulty stars handling
+        document.getElementById('difficultyStars').addEventListener('click', function(e) {
+            if (e.target.classList.contains('star')) {
+                const rating = parseInt(e.target.getAttribute('data-rating'));
+                currentDifficulty = rating;
+                document.getElementById('difficultyRating').value = rating;
+                
+                const stars = this.querySelectorAll('.star');
+                stars.forEach((star, index) => {
+                    if (index < rating) {
+                        star.classList.add('active');
+                    } else {
+                        star.classList.remove('active');
+                    }
+                });
+            }
+        });
         
         // Subject input handling
         document.getElementById('subjectInput').addEventListener('input', function(e) {
@@ -607,18 +512,22 @@
             document.getElementById('showAddBtn').style.display = 'block';
             document.getElementById('addExerciseForm').reset();
             selectedSubjects = [];
+            currentDifficulty = 0;
             updateSubjectChips('subjectChips', []);
+            document.getElementById('difficultyStars').querySelectorAll('.star').forEach(s => s.classList.remove('active'));
         }
         
         document.getElementById('addExerciseForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
             const exerciseData = {
-                exercise_number: parseInt(document.getElementById('exerciseNumber').value),
+                exercise_number: document.getElementById('exerciseNumber').value,
                 methods_used: document.getElementById('methodsUsed').value,
                 tips: document.getElementById('tips').value,
                 problems_encountered: document.getElementById('problems').value,
                 insights: document.getElementById('insights').value,
+                difficulty_rating: currentDifficulty || null,
+                time_spent_minutes: document.getElementById('timeSpent').value ? parseInt(document.getElementById('timeSpent').value) : null,
                 subjects: selectedSubjects
             };
             
@@ -630,10 +539,8 @@
             .then(r => r.json())
             .then(data => {
                 if (data.success) {
-                    // Show badge notifications if any
                     if (data.badges_unlocked && data.badges_unlocked.length > 0) {
                         showBadgeNotifications(data.badges_unlocked);
-                        // Reload after showing notifications
                         setTimeout(() => {
                             location.reload();
                         }, 3000);
@@ -641,11 +548,11 @@
                         location.reload();
                     }
                 } else {
-                    showAlert('formAlert', data.error, 'error');
+                    showAlert('formAlert', data.error, 'danger');
                 }
             })
             .catch(err => {
-                showAlert('formAlert', 'Error adding exercise', 'error');
+                showAlert('formAlert', 'שגיאה בהוספת תרגיל', 'danger');
             });
         });
         
@@ -660,22 +567,47 @@
             .then(r => r.json())
             .then(data => {
                 if (data.success) {
-                    showAlert('notesAlert', 'Notes saved!', 'success');
+                    const alert = document.getElementById('notesAlert');
+                    alert.textContent = 'הערות נשמרו!';
+                    alert.className = 'alert alert-success mt-2';
+                    alert.style.display = 'block';
+                    setTimeout(() => {
+                        alert.style.display = 'none';
+                    }, 3000);
                 }
             });
         }
         
         function editExercise(exerciseId) {
-            document.getElementById(`view-${exerciseId}`).classList.add('hidden');
-            document.getElementById(`edit-${exerciseId}`).classList.add('active');
+            document.getElementById(`view-${exerciseId}`).style.display = 'none';
+            document.getElementById(`edit-${exerciseId}`).style.display = 'block';
             
-            // Initialize edit subjects
-            const subjects = Array.from(document.querySelectorAll(`#exercise-${exerciseId} .subject-tag`))
-                .map(tag => tag.textContent.trim());
+            const subjects = Array.from(document.querySelectorAll(`#exercise-${exerciseId} .subject-chip`))
+                .map(tag => tag.textContent.trim().replace('×', '').trim());
             editSubjects[exerciseId] = [...subjects];
             updateEditSubjectChips(exerciseId);
             
-            // Setup subject input for edit
+            const difficultyStars = document.getElementById(`edit-difficulty-${exerciseId}`);
+            const currentRating = parseInt(document.getElementById(`edit-difficulty-rating-${exerciseId}`).value) || 0;
+            editDifficulties[exerciseId] = currentRating;
+            
+            difficultyStars.querySelectorAll('.star').forEach((star, index) => {
+                star.onclick = () => {
+                    const rating = index + 1;
+                    editDifficulties[exerciseId] = rating;
+                    difficultyStars.querySelectorAll('.star').forEach((s, i) => {
+                        if (i < rating) {
+                            s.classList.add('active');
+                        } else {
+                            s.classList.remove('active');
+                        }
+                    });
+                };
+                if (index < currentRating) {
+                    star.classList.add('active');
+                }
+            });
+            
             const input = document.getElementById(`edit-subject-input-${exerciseId}`);
             input.addEventListener('input', function(e) {
                 const text = e.target.value;
@@ -694,9 +626,10 @@
         }
         
         function cancelEdit(exerciseId) {
-            document.getElementById(`view-${exerciseId}`).classList.remove('hidden');
-            document.getElementById(`edit-${exerciseId}`).classList.remove('active');
+            document.getElementById(`view-${exerciseId}`).style.display = 'block';
+            document.getElementById(`edit-${exerciseId}`).style.display = 'none';
             delete editSubjects[exerciseId];
+            delete editDifficulties[exerciseId];
         }
         
         function saveExercise(exerciseId) {
@@ -705,6 +638,8 @@
                 tips: document.getElementById(`edit-tips-${exerciseId}`).value,
                 problems_encountered: document.getElementById(`edit-problems-${exerciseId}`).value,
                 insights: document.getElementById(`edit-insights-${exerciseId}`).value,
+                difficulty_rating: editDifficulties[exerciseId] || null,
+                time_spent_minutes: document.getElementById(`edit-time-${exerciseId}`).value ? parseInt(document.getElementById(`edit-time-${exerciseId}`).value) : null,
                 subjects: editSubjects[exerciseId] || []
             };
             
@@ -722,7 +657,7 @@
         }
         
         function deleteExercise(exerciseId) {
-            if (confirm('Are you sure you want to delete this exercise?')) {
+            if (confirm('האם אתה בטוח שברצונך למחוק תרגיל זה?')) {
                 fetch(`/exercise/${exerciseId}`, {
                     method: 'DELETE'
                 })
@@ -784,7 +719,7 @@
         function showAlert(id, message, type) {
             const alert = document.getElementById(id);
             alert.textContent = message;
-            alert.className = `alert ${type}`;
+            alert.className = `alert alert-${type} mt-2`;
             alert.style.display = 'block';
             setTimeout(() => {
                 alert.style.display = 'none';
@@ -798,7 +733,7 @@
                     notification.className = 'badge-notification';
                     notification.innerHTML = `
                         <div class="badge-notification-icon">${badge.icon}</div>
-                        <div class="badge-notification-title">Badge Unlocked!</div>
+                        <div class="badge-notification-title">תג נפתח!</div>
                         <div class="badge-notification-desc">${badge.name}</div>
                     `;
                     document.body.appendChild(notification);
@@ -813,9 +748,21 @@
             });
         }
         
-        // Hide form initially
-        document.getElementById('exerciseForm').style.display = 'none';
+        function loadTemplate() {
+            const templateId = document.getElementById('templateSelect').value;
+            if (!templateId) return;
+            
+            fetch(`/api/templates/${templateId}`)
+                .then(r => r.json())
+                .then(data => {
+                    if (data.template) {
+                        document.getElementById('methodsUsed').value = data.template.methods_used || '';
+                        document.getElementById('tips').value = data.template.tips || '';
+                        document.getElementById('problems').value = data.template.problems_encountered || '';
+                        document.getElementById('insights').value = data.template.insights || '';
+                    }
+                });
+        }
     </script>
 </body>
 </html>
-
