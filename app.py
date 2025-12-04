@@ -390,6 +390,10 @@ def get_stats():
         'all_badges': all_badges
     }
 
+# Initialize database when app starts (works with both dev server and gunicorn)
+init_db()
+init_badges()
+
 @app.route('/')
 def index():
     """Main page showing daily entries"""
